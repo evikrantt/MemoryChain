@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>MemoryChain Demo</title></head>
+<body style="font-family:system-ui, -apple-system, Roboto, Arial; padding:20px;">
+  <h1>MemoryChain — Demo</h1>
+  <p>Simple demo to interact with the backend API.</p>
+
+  <div>
+    <h3>Store</h3>
+    <input id="cid" placeholder="ipfs://..." style="width:60%"/><button onclick="store()">Store</button>
+    <pre id="storeOut"></pre>
+  </div>
+
+  <div>
+    <h3>Fetch</h3>
+    <input id="idx" type="number" value="0" /><button onclick="getMem()">Fetch</button>
+    <pre id="memOut"></pre>
+  </div>
+
+<script>
+async function store(){
+  const cid = document.getElementById('cid').value.trim();
+  document.getElementById('storeOut').innerText = '...';
+  try{
+    const res = await fetch('/memories', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({cid})});
+    const j = await res.json(); document.getElementById('storeOut').innerText = JSON.stringify(j,null,2);
+  }catch(e){ document.getElementById('storeOut').innerText = e.message; }
+}
+async function getMem(){
+  const idx = document.getElementById('idx').value;
+  const res = await fetch('/memories/'+idx); const j = await res.json(); document.getElementById('memOut').innerText = JSON.stringify(j,null,2);
+}
+</script>
+</body>
+</html>
